@@ -1,3 +1,6 @@
+import sys
+
+
 def file_print(filename):
     my_file = open(filename, 'r')
     for my_line in my_file:
@@ -57,11 +60,68 @@ file_q5_1.close()
 file_q5_2.close()
 file_print('z_q5_2.txt')
 
+
 # Q6 Write a program that take a file name as command line argument, opens it and then counts
 # number of space characters in that file
+def count_no_of_spaces(filename):
+    my_file = open(filename, 'r')
+    count = 0
+    for my_line in my_file.read():
+        for character in str(my_line):
+            if character == ' ':
+                # print(count, ' = ', character)
+                count += 1
+    my_file.close()
+    return count
+
+
+# python input_output\task2.py 'z_q2.txt'
+q6_filename = sys.argv[1]
+print("\nNumber of white spaces are:", count_no_of_spaces(q6_filename))
 
 
 # Q7 Modify the above program to count the occurrence of each symbol i.e. count of alphabet ‘a’,
 # count of spaces, count of commas and so forth.
+def count_of_each_charecter(filename):
+    my_file = open(filename, 'r')
+    count = {}
+    for my_line in my_file.read():
+        for character in str(my_line):
+            if character in count:
+                count[character] += 1
+            else:
+                count[character] = 1
+    my_file.close()
+    return count
 
 
+q7_filename = q6_filename
+print("\nCount of each charecter : ", count_of_each_charecter(q7_filename))
+
+# Q9 WAP to count the number of words in a file.
+q9_filename = q6_filename
+
+
+def count_of_words(filename):
+    my_file = open(filename, 'r')
+    data = str(my_file.read())
+    list_of_words = [x.strip() for x in data.split(' ') if not x.strip() is '']
+    return len(list_of_words)
+
+
+print(count_of_words(q9_filename))
+
+
+# Q10 Update the above program to count the number of palindromes present in the file
+def count_of_palindromes(filename):
+    my_file = open(filename, 'r')
+    data = str(my_file.read())
+    list_of_words = [x.strip() for x in data.split(' ') if not x.strip() is '']
+    count = 0
+    for word in list_of_words:
+        if word == word[:-1]:
+            count += 1
+    return count
+
+
+print('Number of palindromes are : ', count_of_palindromes(q9_filename))
