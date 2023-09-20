@@ -1,9 +1,17 @@
 from selenium.webdriver.common.by import By
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select
-from my_constants.pages_constants import LOGIN_PAGE_URL, DASHBOARD_PAGE_URL
-from exceptions.page_exceptions import InvalidCredentialsException, IncompleteDetailsException
+from abc import ABC, abstractmethod
+from my_constants.pages_constants import LOGIN_PAGE_URL, DASHBOARD_PAGE_URL, BACKPACK_PRODUCT, BIKE_LIGHT_PRODUCT
+from exceptions.page_exceptions import InvalidCredentialsException, IncompleteDetailsException, ZeroProductsInCartException, NoSuchProductInCartException
 from time import sleep
+
+
+class Cart(ABC):
+    @abstractmethod
+    def get_cart(self):
+        pass
+
 
 class LoginPage:
     def __init__(self, driver: webdriver):
@@ -11,6 +19,7 @@ class LoginPage:
         self.__user_name_box = self.__driver.find_element(By.ID, 'user-name')
         self.__password_box = self.__driver.find_element(By.ID, 'password')
         self.__login_button = self.__driver.find_element(By.ID, 'login-button')
+        self.__error_element = self.__driver.find_element(By.XPATH, '//*[@id="login_button_container"]/div/form/div[3]')
 
     def enter_user_name(self, user_name: str):
         self.__user_name_box.send_keys(user_name)
@@ -25,11 +34,13 @@ class LoginPage:
         if self.__driver.current_url == DASHBOARD_PAGE_URL:
             return DashboardPage(self.__driver)
         else:
-            raise InvalidCredentialsException('Invalid Credentials Entered, Check your input')
+            error_message = self.__error_element.text
+            raise InvalidCredentialsException(error_message)
 
-class DashboardPage:
-    def __init__(self, driver: webdriver):
-        self.__cart_feature = CartFeature(driver)
+
+class DashboardPage(Cart):
+    def __init__(self, driver: webdriver.Chrome):
+        self.__cart_feature = CartFeature.get_cart(driver)
         self.__menu_feature = MenuFeature(driver)
         self.__driver = driver
         self.__product_sorting_select_container = Select(
@@ -46,22 +57,39 @@ class DashboardPage:
         return DashboardPage(self.__driver)
 
     def add_backpack_to_cart(self):
-        sleep(3)
-        self.__backpack_product_button.click()
-        sleep(3)
+        if self.__backpack_product_button.text == 'Add to cart':
+            self.__cart_feature.add_product_to_cart(BACKPACK_PRODUCT)
+            self.__backpack_product_button.click()
+        return DashboardPage(self.__driver)
+
+    def remove_backpack_from_cart(self):
+        if self.__backpack_product_button.text == 'Remove':
+            self.__backpack_product_button.click()
+            self.__cart_feature.remove_product_from_cart(BACKPACK_PRODUCT)
         return DashboardPage(self.__driver)
 
     def add_bike_light_to_cart(self):
-        self.__bike_light_product_button.click()
+        if self.__bike_light_product_button.text == 'Add to cart':
+            self.__cart_feature.add_product_to_cart(BIKE_LIGHT_PRODUCT)
+            self.__bike_light_product_button.click()
+        return DashboardPage(self.__driver)
+
+    def remove_bike_light_from_cart(self):
+        if self.__bike_light_product_button.text == 'Remove':
+            self.__bike_light_product_button.click()
+            self.__cart_feature.remove_product_from_cart(BIKE_LIGHT_PRODUCT)
         return DashboardPage(self.__driver)
 
     def get_menu(self):
         return self.__menu_feature.get_menu_feature()
 
+    def get_cart(self):
+        return self.__cart_feature.get_cart(self.__driver)
 
-class CheckoutPageOne:
+
+class CheckoutPageOne(Cart):
     def __init__(self, driver: webdriver):
-        self.__cart_feature = CartFeature(driver)
+        self.__cart_feature = CartFeature.get_cart(driver)
         self.__menu_feature = MenuFeature(driver)
         self.__driver = driver
         self.__first_name_text_box = self.__driver.find_element(By.ID, 'first-name')
@@ -96,10 +124,13 @@ class CheckoutPageOne:
     def get_menu(self):
         return self.__menu_feature.get_menu_feature()
 
+    def get_cart(self):
+        return self.__cart_feature.get_cart(self.__driver)
 
-class CheckoutPageTwo:
+
+class CheckoutPageTwo(Cart):
     def __init__(self, driver: webdriver):
-        self.__cart_feature = CartFeature(driver)
+        self.__cart_feature = CartFeature.get_cart(driver)
         self.__menu_feature = MenuFeature(driver)
         self.__driver = driver
         self.__finish_btn = self.__driver.find_element(By.ID, 'finish')
@@ -110,6 +141,8 @@ class CheckoutPageTwo:
     def get_menu(self):
         return self.__menu_feature.get_menu_feature()
 
+    def get_cart(self):
+        return self.__cart_feature.get_cart(self.__driver)
 
 
 class CheckoutCompletePage:
@@ -122,17 +155,29 @@ class CheckoutCompletePage:
         return DashboardPage(self.__driver)
 
 
-class CartPage:
-    def __init__(self, driver):
-        self.__cart_feature = CartFeature(driver)
+class CartPage(Cart):
+    def __init__(self, driver = webdriver.Chrome):
+        self.__cart_feature = CartFeature.get_cart(driver)
         self.__menu_feature = MenuFeature(driver)
         self.__driver = driver
         self.__continue_to_shopping_btn = self.__driver.find_element(By.ID, 'continue-shopping')
         self.__continue_to_checkout_btn = self.__driver.find_element(By.ID, 'checkout')
+        try:
+            self.__list_of_products = self.__driver.find_elements(By.XPATH, '//div[@class="cart_list"]//a/div[@class="inventory_item_name"]')
+        except ZeroProductsInCartException as e:
+            print(f'Warning, no products in cart')
+
 
     def continue_to_shop(self):
         self.__continue_to_shopping_btn.click()
         return DashboardPage(self.__driver)
+
+    def get_list_of_products_in_cart(self):
+        return [product.text for product in self.__list_of_products]
+
+
+    def get_cart(self):
+        return self.__cart_feature.get_cart(self.__driver)
 
 
 class MenuFeature:
@@ -143,7 +188,6 @@ class MenuFeature:
         self.__all_items_link = self.__driver.find_element(By.ID, 'inventory_sidebar_link')
         self.__menu_close_button = self.__driver.find_element(By.ID, 'react-burger-cross-btn')
         self.__logout_link = self.__driver.find_element(By.ID, 'logout_sidebar_link')
-        self.__menu_button.click()
 
     def get_all_items(self):
         if not self.__menu_area.is_displayed():
@@ -164,10 +208,34 @@ class MenuFeature:
 
 
 class CartFeature:
-    def __init__(self, driver):
-        self.__driver = driver
-        self.__cart = self.__driver.find_element(By.ID, 'shopping_cart_container')
+    __instance = None
 
-    def get_cart(self):
+    def __new__(cls, driver):
+        if cls.__instance is None:
+            cls.__instance = super(CartFeature, cls).__new__(cls)
+            cls.__instance.__driver = driver
+            cls.__instance.__cart = cls.__instance.__driver.find_element(By.ID, 'shopping_cart_container')
+            cls.__instance.__list_of_products = []
+        return cls.__instance
+
+    @staticmethod
+    def get_cart(driver):
+        return CartFeature(driver)
+
+    def get_cart_page(self):
         self.__cart.click()
         return CartPage(self.__driver)
+
+    def add_product_to_cart(self, product):
+        if product not in self.__list_of_products:
+            self.__list_of_products.append(product)
+
+    def remove_product_from_cart(self, product):
+        # Need to change this mechanism, this is for demo purpose
+        if product in self.__list_of_products:
+            self.__list_of_products.remove(product)
+        else:
+            raise NoSuchProductInCartException
+
+    def get_no_of_products_in_cart(self):
+        return len(self.__list_of_products)
