@@ -2,7 +2,7 @@ from selenium.webdriver.common.by import By
 from selenium import webdriver
 from exceptions.page_exceptions import InvalidCredentialsException
 from my_constants.pages_constants import DASHBOARD_PAGE_URL
-from dashboard_page import DashboardPage
+from .dashboard_page import DashboardPage
 
 
 class LoginPage:
@@ -21,7 +21,7 @@ class LoginPage:
         return LoginPage(self.__driver)
 
     def click_login_button(self):
-        self.__login_button.click();
+        self.__login_button.click()
         if self.__driver.current_url == DASHBOARD_PAGE_URL:
             return DashboardPage(self.__driver)
         else:

@@ -1,13 +1,13 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from common_feature import MenuArea, Cart
 from exceptions.page_exceptions import IncompleteDetailsException
+from .cart_feature import CartFeature
+from .menu_feature import MenuFeature
 
-
-class CheckoutPageOne(MenuArea, Cart):
+class CheckoutPageOne:
     def __init__(self, driver: webdriver):
-        MenuArea.__init__(self, driver)
-        Cart.__init__(self, driver)
+        self.__cart_feature = CartFeature(driver)
+        self.__menu_feature = MenuFeature(driver)
         self.__driver = driver
         self.__first_name_text_box = self.__driver.find_element(By.ID, 'first-name')
         self.__last_name_text_box = self.__driver.find_element(By.ID, 'last-name')
@@ -38,13 +38,19 @@ class CheckoutPageOne(MenuArea, Cart):
                 return False
         return True
 
+    def get_menu(self):
+        return self.__menu_feature.get_menu_feature()
 
-class CheckoutPageTwo(MenuArea, Cart):
+
+class CheckoutPageTwo:
     def __init__(self, driver: webdriver):
-        MenuArea.__init__(self, driver)
-        Cart.__init__(self, driver)
+        self.__cart_feature = CartFeature(driver)
+        self.__menu_feature = MenuFeature(driver)
         self.__driver = driver
         self.__finish_btn = self.__driver.find_element(By.ID, 'finish')
 
     def confirm_order(self):
         self.__finish_btn.click()
+
+    def get_menu(self):
+        return self.__menu_feature.get_menu_feature()

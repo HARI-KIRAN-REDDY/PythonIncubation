@@ -1,15 +1,15 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-
-from common_feature import MenuArea, Cart
 from selenium.webdriver.support.ui import Select
 from time import sleep
+from .cart_feature import CartFeature
+from .menu_feature import MenuFeature
 
 
-class DashboardPage(MenuArea, Cart):
+class DashboardPage:
     def __init__(self, driver: webdriver):
-        MenuArea.__init__(self, driver)
-        Cart.__init__(self, driver)
+        self.__cart_feature = CartFeature(driver)
+        self.__menu_feature = MenuFeature(driver)
         self.__driver = driver
         self.__product_sorting_select_container = Select(
             self.__driver.find_element(By.XPATH, '//*[@id="header_container"]/div[2]/div/span/select'))
@@ -33,3 +33,6 @@ class DashboardPage(MenuArea, Cart):
     def add_bike_light_to_cart(self):
         self.__bike_light_product_button.click()
         return DashboardPage(self.__driver)
+
+    def get_menu(self):
+        return self.__menu_feature.get_menu_feature()
