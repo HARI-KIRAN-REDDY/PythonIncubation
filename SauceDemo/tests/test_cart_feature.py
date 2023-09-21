@@ -1,6 +1,10 @@
+import pytest
+
 from .fixtures_for_test import setup_and_teardown_fixture_for_getting_dashboard
 
 
+@pytest.mark.cart
+@pytest.mark.positive
 def test_adding_products_to_cart(setup_and_teardown_fixture_for_getting_dashboard):
     dashboard_page = setup_and_teardown_fixture_for_getting_dashboard
     cart = (dashboard_page
@@ -10,6 +14,8 @@ def test_adding_products_to_cart(setup_and_teardown_fixture_for_getting_dashboar
     assert cart.get_no_of_products_in_cart() == 2
 
 
+@pytest.mark.cart_page
+@pytest.mark.positive
 def test_added_products_displayed_in_cart_page(setup_and_teardown_fixture_for_getting_dashboard):
     dashboard_page = setup_and_teardown_fixture_for_getting_dashboard
     cart_page = (dashboard_page
@@ -21,7 +27,9 @@ def test_added_products_displayed_in_cart_page(setup_and_teardown_fixture_for_ge
     print(f'Products added to cart {list_of_products_displayed}')
     assert not len(list_of_products_displayed) == 0
 
-
+@pytest.mark.cart
+@pytest.mark.dashboard
+@pytest.mark.positive
 def test_removing_products_from_cart_in_dashboard_page(setup_and_teardown_fixture_for_getting_dashboard):
     dashboard_page = setup_and_teardown_fixture_for_getting_dashboard
     cart = (dashboard_page

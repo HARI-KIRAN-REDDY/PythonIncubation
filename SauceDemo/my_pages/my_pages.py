@@ -8,7 +8,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 
 from my_constants.pages_constants import DASHBOARD_PAGE_URL, BACKPACK_PRODUCT, BIKE_LIGHT_PRODUCT
 from exceptions.page_exceptions import InvalidCredentialsException, IncompleteDetailsException, ZeroProductsInCartException, NoSuchProductInCartException
-from time import sleep
+
 
 class Cart(ABC):
     @abstractmethod
@@ -20,7 +20,7 @@ class Menu(ABC):
         pass
 
 class LoginPage:
-    def __init__(self, driver: webdriver):
+    def __init__(self, driver):
         self.__driver = driver
         self.__user_name_box = self.__driver.find_element(By.ID, 'user-name')
         self.__password_box = self.__driver.find_element(By.ID, 'password')
@@ -101,7 +101,7 @@ class DashboardPage(Cart, Menu):
 
 
 class CheckoutPageOne(Cart, Menu):
-    def __init__(self, driver: webdriver):
+    def __init__(self, driver):
         self.__cart_feature = CartFeature.get_cart(driver)
         self.__menu_feature = MenuFeature(driver)
         self.__driver = driver
@@ -147,7 +147,6 @@ class CheckoutPageTwo(Cart, Menu):
         self.__cart_feature = CartFeature.get_cart(driver)
         self.__menu_feature = MenuFeature(driver)
         self.__driver = driver
-        sleep(2)
         self.__finish_btn = self.__driver.find_element(By.ID, 'finish')
 
     def confirm_order(self):
@@ -162,7 +161,7 @@ class CheckoutPageTwo(Cart, Menu):
 
 
 class CheckoutCompletePage:
-    def __init__(self, driver: webdriver):
+    def __init__(self, driver):
         self.__driver = driver
         self.__back_to_home_btn = self.__driver.find_element(By.ID, 'back-to-products')
 
@@ -203,7 +202,7 @@ class CartPage(Cart, Menu):
 
 
 class MenuFeature:
-    def __init__(self, driver = webdriver.Chrome):
+    def __init__(self, driver):
         self.__driver = driver
         self.__menu_area = self.__driver.find_element(By.XPATH, '//*[@id="menu_button_container"]/div/div[2]')
         self.__menu_button = self.__driver.find_element(By.ID, 'react-burger-menu-btn')
@@ -246,10 +245,11 @@ class CartFeature:
     def __new__(cls, driver):
         if cls.__instance is None:
             cls.__instance = super(CartFeature, cls).__new__(cls)
-            cls.__instance.__driver = driver
-            cls.__instance.__cart = cls.__instance.__driver.find_element(By.ID, 'shopping_cart_container')
             cls.__instance.__list_of_products = []
-            cls.__instance.__no_of_items_in_cart_element = cls.__instance.__driver.find_element(By.XPATH, '//a[@class="shopping_cart_link"]')
+        cls.__instance.__driver = driver
+        cls.__instance.__cart = cls.__instance.__driver.find_element(By.ID, 'shopping_cart_container')
+        cls.__instance.__no_of_items_in_cart_element = cls.__instance.__driver.find_element(By.XPATH,
+                                                                                            '//a[@class="shopping_cart_link"]')
         return cls.__instance
 
     @staticmethod
@@ -274,5 +274,5 @@ class CartFeature:
     def get_no_of_products_in_cart(self):
         try:
             return int(self.__no_of_items_in_cart_element.text)
-        except StaleElementReferenceException:
+        except ValueError:
             return 0
