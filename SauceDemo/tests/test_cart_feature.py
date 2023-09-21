@@ -1,5 +1,4 @@
 from .fixtures_for_test import setup_and_teardown_fixture_for_getting_dashboard
-from time import sleep
 
 
 def test_adding_products_to_cart(setup_and_teardown_fixture_for_getting_dashboard):
@@ -11,7 +10,7 @@ def test_adding_products_to_cart(setup_and_teardown_fixture_for_getting_dashboar
     assert cart.get_no_of_products_in_cart() == 2
 
 
-def test_addedd_products_displayed_in_cart_page(setup_and_teardown_fixture_for_getting_dashboard):
+def test_added_products_displayed_in_cart_page(setup_and_teardown_fixture_for_getting_dashboard):
     dashboard_page = setup_and_teardown_fixture_for_getting_dashboard
     cart_page = (dashboard_page
                  .add_backpack_to_cart()
