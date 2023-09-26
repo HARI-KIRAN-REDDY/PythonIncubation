@@ -2,8 +2,8 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from dashboard_page import DashboardPage
 from checkout_page import CheckoutPageOne
-from .cart_feature import CartFeature
-from .menu_feature import MenuFeature
+from pages.cart_feature import CartFeature
+from menu_feature import MenuFeature
 
 
 class CartPage:

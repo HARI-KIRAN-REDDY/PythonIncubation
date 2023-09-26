@@ -1,9 +1,8 @@
 import pytest
-from .test_utils import get_browser
+from tests_in_classes.test_utils import get_browser
 from my_constants.pages_constants import LOGIN_PAGE_URL
 from config import USER_NAME, PASSWORD
 from my_pages.my_pages import LoginPage
-from time import sleep
 
 
 class TestCart:

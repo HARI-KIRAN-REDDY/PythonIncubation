@@ -23,3 +23,5 @@ def login_and_get_dashboard(driver):
                       .enter_password(PASSWORD)
                       .click_login_button())
     return dashboard_page
+
+

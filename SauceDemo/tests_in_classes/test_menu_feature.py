@@ -1,6 +1,6 @@
 import pytest
 from my_pages.my_pages import LoginPage
-from .test_utils import get_browser, login_and_get_dashboard
+from tests_in_classes.test_utils import get_browser, login_and_get_dashboard
 
 
 class TestMenu:
