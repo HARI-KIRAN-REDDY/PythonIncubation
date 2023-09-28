@@ -1,7 +1,6 @@
 import pytest
-from tests_in_classes.test_utils import get_browser
-from my_constants.pages_constants import LOGIN_PAGE_URL
-from config import USER_NAME, PASSWORD
+from utils.test_util import get_browser
+from utils.config_util import ConfigUtil
 from my_pages.my_pages import LoginPage
 
 
@@ -9,11 +8,11 @@ class TestCart:
     @pytest.fixture(scope='function')
     def get_cart_feature(self, get_browser):
         driver = get_browser
-        driver.get(LOGIN_PAGE_URL)
+        driver.get(ConfigUtil.get_login_page_url())
         login_page = LoginPage(driver)
         cart = (login_page
-                .enter_user_name(USER_NAME)
-                .enter_password(PASSWORD)
+                .enter_user_name(ConfigUtil.get_user_name())
+                .enter_password(ConfigUtil.get_password())
                 .click_login_button()
                 .get_cart())
         yield cart

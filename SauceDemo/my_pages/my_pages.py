@@ -4,8 +4,7 @@ from selenium.webdriver.support.ui import Select
 from abc import ABC, abstractmethod
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
-
-from my_constants.pages_constants import DASHBOARD_PAGE_URL, BACKPACK_PRODUCT, BIKE_LIGHT_PRODUCT
+from utils.config_util import ConfigUtil
 from exceptions.page_exceptions import InvalidCredentialsException, IncompleteDetailsException, ZeroProductsInCartException, NoSuchProductInCartException
 
 
@@ -36,7 +35,7 @@ class LoginPage:
 
     def click_login_button(self):
         self.__login_button.click()
-        if self.__driver.current_url == DASHBOARD_PAGE_URL:
+        if self.__driver.current_url == ConfigUtil.get_dashboard_page_url():
             return DashboardPage(self.__driver)
         else:
             error_message = self.__error_element.text
@@ -70,26 +69,26 @@ class DashboardPage(Cart, Menu):
 
     def add_backpack_to_cart(self):
         if self.__backpack_product_button.text == 'Add to cart':
-            self.__cart_feature.add_product_to_cart(BACKPACK_PRODUCT)
+            self.__cart_feature.add_product_to_cart(ConfigUtil.get_backpack_product_name())
             self.__backpack_product_button.click()
         return DashboardPage(self.__driver)
 
     def remove_backpack_from_cart(self):
         if self.__backpack_product_button.text == 'Remove':
             self.__backpack_product_button.click()
-            self.__cart_feature.remove_product_from_cart(BACKPACK_PRODUCT)
+            self.__cart_feature.remove_product_from_cart(ConfigUtil.get_backpack_product_name())
         return DashboardPage(self.__driver)
 
     def add_bike_light_to_cart(self):
         if self.__bike_light_product_button.text == 'Add to cart':
-            self.__cart_feature.add_product_to_cart(BIKE_LIGHT_PRODUCT)
+            self.__cart_feature.add_product_to_cart(ConfigUtil.get_bike_light_product_name())
             self.__bike_light_product_button.click()
         return DashboardPage(self.__driver)
 
     def remove_bike_light_from_cart(self):
         if self.__bike_light_product_button.text == 'Remove':
             self.__bike_light_product_button.click()
-            self.__cart_feature.remove_product_from_cart(BIKE_LIGHT_PRODUCT)
+            self.__cart_feature.remove_product_from_cart(ConfigUtil.get_bike_light_product_name())
         return DashboardPage(self.__driver)
 
     def get_menu(self):

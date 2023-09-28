@@ -1,5 +1,5 @@
 import pytest
-from tests_in_classes.test_utils import get_browser, login_and_get_dashboard
+from utils.test_util import get_browser, login_and_get_dashboard
 
 
 class TestDashboard:

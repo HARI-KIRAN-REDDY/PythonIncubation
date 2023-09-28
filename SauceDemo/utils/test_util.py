@@ -1,11 +1,10 @@
 import pytest
 from selenium import webdriver
-from config import BROWSERS, USER_NAME, PASSWORD
-from my_constants.pages_constants import LOGIN_PAGE_URL
+from utils.config_util import ConfigUtil
 from my_pages.my_pages import LoginPage
 
 
-@pytest.fixture(params=BROWSERS)
+@pytest.fixture(params=ConfigUtil.get_browsers())
 def get_browser(request):
     driver = None
     if request.param == 'chrome':
@@ -18,12 +17,11 @@ def get_browser(request):
 
 
 def login_and_get_dashboard(driver):
-    driver.get(LOGIN_PAGE_URL)
+    driver.get(ConfigUtil.get_login_page_url())
     login_page = LoginPage(driver)
     dashboard_page = (login_page
-                      .enter_user_name(USER_NAME)
-                      .enter_password(PASSWORD)
+                      .enter_user_name(ConfigUtil.get_user_name())
+                      .enter_password(ConfigUtil.get_password())
                       .click_login_button())
     return dashboard_page
-
 

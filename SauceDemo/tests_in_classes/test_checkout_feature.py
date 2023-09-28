@@ -1,7 +1,7 @@
 import pytest
 from my_pages.my_pages import CheckoutCompletePage
 from exceptions.page_exceptions import IncompleteDetailsException
-from tests_in_classes.test_utils import get_browser, login_and_get_dashboard
+from utils.test_util import get_browser, login_and_get_dashboard
 
 
 class TestCheckout:

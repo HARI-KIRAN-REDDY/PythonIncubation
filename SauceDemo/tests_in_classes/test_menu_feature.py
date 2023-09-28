@@ -1,15 +1,16 @@
 import pytest
 from my_pages.my_pages import LoginPage
-from tests_in_classes.test_utils import get_browser, login_and_get_dashboard
+from utils.test_util import get_browser, login_and_get_dashboard
 
 
 class TestMenu:
-    @pytest.fixture(scope='class')
+    @pytest.fixture(scope='function')
     def get_dashboard(self, get_browser):
         driver = get_browser
         dashboard_page = login_and_get_dashboard(driver)
         yield dashboard_page
         driver.quit()
+
 
     @pytest.mark.logout
     @pytest.mark.menu
