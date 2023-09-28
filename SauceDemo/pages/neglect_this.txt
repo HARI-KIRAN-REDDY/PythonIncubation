@@ -1,3 +1,6 @@
+This is initially in SauceDemo/my_pages directory as my_pages.py
+
+
 from selenium.webdriver.common.by import By
 from selenium import webdriver
 from selenium.webdriver.support.ui import Select

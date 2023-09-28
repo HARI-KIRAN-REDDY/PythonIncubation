@@ -1,5 +1,6 @@
 import pytest
-from my_pages.my_pages import CheckoutCompletePage
+# from my_pages.my_pages import CheckoutCompletePage
+from pages.checkout_complete_page import CheckoutCompletePage
 from exceptions.page_exceptions import IncompleteDetailsException
 from utils.test_util import get_browser, login_and_get_dashboard
 

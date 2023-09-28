@@ -1,8 +1,8 @@
 import pytest
 from utils.test_util import get_browser
 from utils.config_util import ConfigUtil
-from my_pages.my_pages import LoginPage
-
+# from my_pages.my_pages import LoginPage
+from pages.login_page import LoginPage
 
 class TestCart:
     @pytest.fixture(scope='function')

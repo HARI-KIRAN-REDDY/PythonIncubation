@@ -1,5 +1,5 @@
 import pytest
-from my_pages.my_pages import LoginPage
+from pages.login_page import LoginPage
 from utils.test_util import get_browser, login_and_get_dashboard
 
 

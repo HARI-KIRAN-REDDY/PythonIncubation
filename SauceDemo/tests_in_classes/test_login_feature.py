@@ -42,3 +42,4 @@ class TestLoginFeature:
                 .enter_password(credentials['password'])
                 .click_login_button())
         assert type(page) is DashboardPage
+

@@ -1,6 +1,5 @@
 import csv
 import os
-import sys
 
 class TestDataGetter:
     @staticmethod

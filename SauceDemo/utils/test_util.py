@@ -1,7 +1,8 @@
 import pytest
 from selenium import webdriver
 from utils.config_util import ConfigUtil
-from my_pages.my_pages import LoginPage
+# from my_pages.my_pages import LoginPage
+from pages.login_page import LoginPage
 
 
 @pytest.fixture(params=ConfigUtil.get_browsers())
