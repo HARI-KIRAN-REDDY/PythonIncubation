@@ -4,12 +4,11 @@ from utils.test_util import get_browser
 # from my_pages.my_pages import LoginPage, DashboardPage
 from pages.login_page import LoginPage
 from pages.dashboard_page import DashboardPage
-from tests_in_classes.data_providers.my_data import get_valid_login_credentials, get_invalid_login_credentials
-
+from utils.test_data_util import TestDataGetter
 
 class TestLoginFeature:
-    valid_credentials = get_valid_login_credentials()
-    invalid_credentials = get_invalid_login_credentials()
+    valid_credentials = TestDataGetter.get_valid_login_credentials()
+    invalid_credentials = TestDataGetter.get_invalid_login_credentials()
 
     @pytest.fixture(scope='function')
     def get_login_page(self, get_browser):
