@@ -10,8 +10,8 @@ class TestLoginFeature:
     valid_credentials = get_valid_login_credentials()
     invalid_credentials = get_invalid_login_credentials()
     @pytest.fixture(scope='function')
-    def get_login_page(self):
-        driver = get_browser()
+    def get_login_page(self, get_browser):
+        driver = get_browser
         driver.get(LOGIN_PAGE_URL)
         login_page = LoginPage(driver)
         yield login_page

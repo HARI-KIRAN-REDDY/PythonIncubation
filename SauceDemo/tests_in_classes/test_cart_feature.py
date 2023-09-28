@@ -7,8 +7,8 @@ from my_pages.my_pages import LoginPage
 
 class TestCart:
     @pytest.fixture(scope='function')
-    def get_cart_feature(self):
-        driver = get_browser()
+    def get_cart_feature(self, get_browser):
+        driver = get_browser
         driver.get(LOGIN_PAGE_URL)
         login_page = LoginPage(driver)
         cart = (login_page

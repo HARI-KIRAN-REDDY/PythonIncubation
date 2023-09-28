@@ -1,14 +1,11 @@
 import pytest
-from my_constants.pages_constants import LOGIN_PAGE_URL
-from config import USER_NAME, PASSWORD
-from my_pages.my_pages import LoginPage
 from tests_in_classes.test_utils import get_browser, login_and_get_dashboard
 
 
 class TestDashboard:
     @pytest.fixture(scope='function')
-    def get_dashboard(self):
-        driver = get_browser()
+    def get_dashboard(self, get_browser):
+        driver = get_browser
         dashboard_page = login_and_get_dashboard(driver)
         yield dashboard_page
         driver.quit()

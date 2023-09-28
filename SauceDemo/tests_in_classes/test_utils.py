@@ -1,16 +1,18 @@
+import pytest
 from selenium import webdriver
-from config import BROWSER, USER_NAME, PASSWORD
+from config import BROWSERS, USER_NAME, PASSWORD
 from my_constants.pages_constants import LOGIN_PAGE_URL
 from my_pages.my_pages import LoginPage
 
 
-def get_browser():
+@pytest.fixture(params=BROWSERS)
+def get_browser(request):
     driver = None
-    if BROWSER == 'chrome':
+    if request.param == 'chrome':
         driver = webdriver.Chrome()
-    elif BROWSER == 'edge':
+    elif request.param == 'edge':
         driver = webdriver.Edge()
-    elif BROWSER == 'firefox':
+    elif request.param == 'firefox':
         driver = webdriver.Firefox()
     return driver
 

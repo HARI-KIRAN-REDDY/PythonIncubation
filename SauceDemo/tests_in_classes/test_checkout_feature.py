@@ -6,8 +6,8 @@ from tests_in_classes.test_utils import get_browser, login_and_get_dashboard
 
 class TestCheckout:
     @pytest.fixture(scope='function')
-    def get_dashboard(self):
-        driver = get_browser()
+    def get_dashboard(self, get_browser):
+        driver = get_browser
         dashboard_page = login_and_get_dashboard(driver)
         yield dashboard_page
         driver.quit()
