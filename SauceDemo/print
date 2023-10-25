@@ -1,0 +1,23 @@
+ Volume in drive C has no label.
+ Volume Serial Number is F6CC-EF57
+
+ Directory of C:\Myfiles\Python Learning\pythonWorkSpace\SauceDemo
+
+19-10-2023  10:46    <DIR>          .
+19-10-2023  10:46    <DIR>          ..
+28-09-2023  19:39                42 .gitignore
+17-10-2023  12:05    <DIR>          .idea
+15-10-2023  23:13    <DIR>          .pytest_cache
+28-09-2023  18:10               301 config.ini
+20-09-2023  18:25    <DIR>          exceptions
+28-09-2023  20:07    <DIR>          pages
+19-10-2023  10:58                 0 print
+28-09-2023  13:32               306 pytest.ini
+28-09-2023  20:08            44,050 pytestreport.html
+15-10-2023  23:13    <DIR>          tests_in_classes
+28-09-2023  18:46    <DIR>          test_data
+15-10-2023  23:13    <DIR>          utils
+18-09-2023  15:09    <DIR>          venv
+28-09-2023  18:37    <DIR>          __pycache__
+               5 File(s)         44,699 bytes
+              11 Dir(s)  376,250,085,376 bytes free
